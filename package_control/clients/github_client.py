@@ -256,7 +256,7 @@ class GitHubClient(JSONApiClient):
 
     def _make_api_url(self, user_repo, suffix=''):
         """
-        Generate a URL for the BitBucket API
+        Generate a URL for the GitHub API
 
         :param user_repo:
             The user/repo of the repository
