@@ -20,7 +20,7 @@ class GitHubClient(JSONApiClient):
             The tags URL if repo was a GitHub repo, otherwise False
         """
 
-        match = re.match('https?://github.com/([^/]+/[^/]+)/?$', repo)
+        match = re.match('https://github.com/([^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -41,7 +41,7 @@ class GitHubClient(JSONApiClient):
             The branch URL if repo was a GitHub repo, otherwise False
         """
 
-        match = re.match('https?://github.com/([^/]+/[^/]+)/?$', repo)
+        match = re.match('https://github.com/([^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -74,7 +74,7 @@ class GitHubClient(JSONApiClient):
               `date` - the ISO-8601 timestamp string when the version was published
         """
 
-        tags_match = re.match('https?://github.com/([^/]+/[^/]+)/tags/?$', url)
+        tags_match = re.match('https://github.com/([^/]+/[^/]+)/tags/?$', url)
 
         version = None
         url_pattern = 'https://codeload.github.com/%s/zip/%s'
@@ -201,7 +201,7 @@ class GitHubClient(JSONApiClient):
               `donate` - URL of a donate page
         """
 
-        user_match = re.match('https?://github.com/([^/]+)/?$', url)
+        user_match = re.match('https://github.com/([^/]+)/?$', url)
         if user_match is None:
             return None
 
@@ -314,11 +314,11 @@ class GitHubClient(JSONApiClient):
         """
 
         branch = None
-        branch_match = re.match('https?://github.com/[^/]+/[^/]+/tree/([^/]+)/?$', url)
+        branch_match = re.match('https://github.com/[^/]+/[^/]+/tree/([^/]+)/?$', url)
         if branch_match is not None:
             branch = branch_match.group(1)
 
-        repo_match = re.match('https?://github.com/([^/]+/[^/]+)($|/.*$)', url)
+        repo_match = re.match('https://github.com/([^/]+/[^/]+)($|/.*$)', url)
         if repo_match is None:
             return (None, None)
 
