@@ -5,10 +5,8 @@ from itertools import chain
 from urllib.parse import urljoin, urlparse
 
 from .. import text
-from ..clients.bitbucket_client import BitBucketClient
 from ..clients.client_exception import ClientException
-from ..clients.github_client import GitHubClient
-from ..clients.gitlab_client import GitLabClient
+from ..clients import CLIENTS
 from ..console_write import console_write
 from ..download_manager import downloader, update_url
 from ..downloaders.downloader_exception import DownloaderException
@@ -265,7 +263,7 @@ class RepositoryProvider(BaseRepositoryProvider):
         debug = self.settings.get('debug')
 
         clients = [
-            Client(self.settings) for Client in (GitHubClient, GitLabClient, BitBucketClient)
+            Client(self.settings) for Client in CLIENTS
         ]
 
         output = {}
@@ -511,7 +509,7 @@ class RepositoryProvider(BaseRepositoryProvider):
         debug = self.settings.get('debug')
 
         clients = [
-            Client(self.settings) for Client in (GitHubClient, GitLabClient, BitBucketClient)
+            Client(self.settings) for Client in CLIENTS
         ]
 
         # Backfill the "previous_names" keys for old schemas
