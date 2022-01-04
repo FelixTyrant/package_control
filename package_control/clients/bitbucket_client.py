@@ -33,7 +33,7 @@ class BitBucketClient(JSONApiClient):
             The tags URL if repo was a BitBucket repo, otherwise False
         """
 
-        match = re.match('https?://bitbucket.org/([^/]+/[^/]+)/?$', repo)
+        match = re.match('https://bitbucket.org/([^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -54,7 +54,7 @@ class BitBucketClient(JSONApiClient):
             The branch URL if repo was a BitBucket repo, otherwise False
         """
 
-        match = re.match('https?://bitbucket.org/([^/]+/[^/]+)/?$', repo)
+        match = re.match('https://bitbucket.org/([^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -87,7 +87,7 @@ class BitBucketClient(JSONApiClient):
               `date` - the ISO-8601 timestamp string when the version was published
         """
 
-        tags_match = re.match('https?://bitbucket.org/([^/]+/[^#/]+)/?#tags$', url)
+        tags_match = re.match('https://bitbucket.org/([^/]+/[^#/]+)/?#tags$', url)
 
         version = None
         url_pattern = 'https://bitbucket.org/%s/get/%s.zip'
@@ -275,8 +275,8 @@ class BitBucketClient(JSONApiClient):
             A tuple of (user/repo, branch name) or (None, None) if not matching
         """
 
-        repo_match = re.match('https?://bitbucket.org/([^/]+/[^/]+)/?$', url)
-        branch_match = re.match('https?://bitbucket.org/([^/]+/[^/]+)/src/([^/]+)/?$', url)
+        repo_match = re.match('https://bitbucket.org/([^/]+/[^/]+)/?$', url)
+        branch_match = re.match('https://bitbucket.org/([^/]+/[^/]+)/src/([^/]+)/?$', url)
 
         if repo_match:
             user_repo = repo_match.group(1)
