@@ -43,19 +43,23 @@ class ReadmeClient(JSONApiClient):
         # Try to grab the contents of a GitHub-based readme by grabbing the cached
         # content of the readme API call
         github_match = re.match(
-            r'https://raw\.github(?:usercontent)?\.com/([^/]+/[^/]+)/([^/]+)/'
-            r'readme(\.(md|mkd|mdown|markdown|textile|creole|rst|txt))?$',
+            r'https://raw\.github(?:usercontent)?\.com'
+            r'/(?P<user_repo>[^/]+/[^/]+)'
+            r'/(?P<branch>[^/]+)'
+            r'/readme(\.(md|mkd|mdown|markdown|textile|creole|rst|txt))?$',
             url,
             re.I
         )
         if github_match:
-            user_repo = github_match.group(1)
-            branch = github_match.group(2)
-
-            query_string = urlencode({'ref': branch})
-            readme_json_url = 'https://api.github.com/repos/%s/readme?%s' % (user_repo, query_string)
             try:
-                info = self.fetch_json(readme_json_url, prefer_cached=True)
+                info = self.fetch_json(
+                    'https://api.github.com/repos/%s/readme?%s' % (
+                        github_match.group("user_repo"),
+                        urlencode({'ref': github_match.group("branch")})
+                    ),
+                    prefer_cached=True
+                )
+
                 contents = base64.b64decode(info['content'])
             except (ValueError):
                 pass

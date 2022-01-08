@@ -33,11 +33,11 @@ class BitBucketClient(JSONApiClient):
             The tags URL if repo was a BitBucket repo, otherwise False
         """
 
-        match = re.match('https://bitbucket.org/([^/]+/[^/]+)/?$', repo)
+        match = re.match('https://bitbucket.org/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
-        return 'https://bitbucket.org/%s#tags' % match.group(1)
+        return 'https://bitbucket.org/%s#tags' % match.group('user_repo')
 
     def make_branch_url(self, repo, branch):
         """
@@ -54,11 +54,11 @@ class BitBucketClient(JSONApiClient):
             The branch URL if repo was a BitBucket repo, otherwise False
         """
 
-        match = re.match('https://bitbucket.org/([^/]+/[^/]+)/?$', repo)
+        match = re.match('https://bitbucket.org/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
-        return 'https://bitbucket.org/%s/src/%s' % (match.group(1), quote(branch))
+        return 'https://bitbucket.org/%s/src/%s' % (match.group('user_repo'), quote(branch))
 
     def download_info(self, url, tag_prefix=None):
         """
@@ -87,17 +87,18 @@ class BitBucketClient(JSONApiClient):
               `date` - the ISO-8601 timestamp string when the version was published
         """
 
-        tags_match = re.match('https://bitbucket.org/([^/]+/[^#/]+)/?#tags$', url)
+        tags_match = re.match('https://bitbucket.org/(?P<user_repo>[^/]+/[^#/]+)/?#tags$', url)
 
         version = None
         url_pattern = 'https://bitbucket.org/%s/get/%s.zip'
 
         output = []
         if tags_match:
-            user_repo = tags_match.group(1)
-
             tags_list = {}
-            tags_url = self._make_api_url(user_repo, '/refs/tags?pagelen=100')
+            tags_url = self._make_api_url(
+                tags_match.group('user_repo'),
+                '/refs/tags?pagelen=100'
+            )
             while tags_url:
                 tags_json = self.fetch_json(tags_url)
                 for tag in tags_json['values']:
@@ -116,7 +117,7 @@ class BitBucketClient(JSONApiClient):
                     continue
                 tag = info['prefix'] + version
                 output.append({
-                    'url': url_pattern % (user_repo, tag),
+                    'url': url_pattern % (tags_match.group('user_repo'), tag),
                     'version': version,
                     'date': tags_list[tag]
                 })
@@ -275,18 +276,14 @@ class BitBucketClient(JSONApiClient):
             A tuple of (user/repo, branch name) or (None, None) if not matching
         """
 
-        repo_match = re.match('https://bitbucket.org/([^/]+/[^/]+)/?$', url)
-        branch_match = re.match('https://bitbucket.org/([^/]+/[^/]+)/src/([^/]+)/?$', url)
+        repo_match = re.match('https://bitbucket.org/(?P<user_repo>[^/]+/[^/]+)/?$', url)
+        branch_match = re.match('https://bitbucket.org/(?P<user_repo>[^/]+/[^/]+)/src/(?P<branch>[^/]+)/?$', url)
 
         if repo_match:
-            user_repo = repo_match.group(1)
-            branch = self._main_branch_name(user_repo)
+            return (repo_match.group('user_repo'), self._main_branch_name(repo_match.group('user_repo')))
 
         elif branch_match:
-            user_repo = branch_match.group(1)
-            branch = branch_match.group(2)
+            return (branch_match.group('user_repo'), branch_match.group('branch'))
 
         else:
             return (None, None)
-
-        return (user_repo, branch)
