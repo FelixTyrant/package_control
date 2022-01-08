@@ -19,7 +19,7 @@ class GitLabClient(JSONApiClient):
             The tags URL if repo was a GitLab repo, otherwise False
         """
 
-        match = re.match('https://gitlab.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
+        match = re.match(r'https://gitlab.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -40,7 +40,7 @@ class GitLabClient(JSONApiClient):
             The branch URL if repo was a GitLab repo, otherwise False
         """
 
-        match = re.match('https://gitlab.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
+        match = re.match(r'https://gitlab.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -73,7 +73,7 @@ class GitLabClient(JSONApiClient):
               `date` - the ISO-8601 timestamp string when the version was published
         """
 
-        tags_match = re.match('https://gitlab.com/(?P<user>[^/]+)/(?P<repo>[^/]+)/-/tags/?$', url)
+        tags_match = re.match(r'https://gitlab.com/(?P<user>[^/]+)/(?P<repo>[^/]+)/-/tags/?$', url)
 
         version = None
         url_pattern = 'https://gitlab.com/%s/%s/-/archive/%s/%s-%s.zip'
@@ -242,7 +242,7 @@ class GitLabClient(JSONApiClient):
               `donate` - URL of a donate page
         """
 
-        user_match = re.match('https://gitlab.com/(?P<user>[^/]+)/?$', url)
+        user_match = re.match(r'https://gitlab.com/(?P<user>[^/]+)/?$', url)
         if user_match is None:
             return None
 

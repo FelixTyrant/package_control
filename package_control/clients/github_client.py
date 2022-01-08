@@ -20,7 +20,7 @@ class GitHubClient(JSONApiClient):
             The tags URL if repo was a GitHub repo, otherwise False
         """
 
-        match = re.match('https://github.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
+        match = re.match(r'https://github.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -41,7 +41,7 @@ class GitHubClient(JSONApiClient):
             The branch URL if repo was a GitHub repo, otherwise False
         """
 
-        match = re.match('https://github.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
+        match = re.match(r'https://github.com/(?P<user_repo>[^/]+/[^/]+)/?$', repo)
         if not match:
             return False
 
@@ -74,7 +74,7 @@ class GitHubClient(JSONApiClient):
               `date` - the ISO-8601 timestamp string when the version was published
         """
 
-        tags_match = re.match('https://github.com/(?P<user_repo>[^/]+/[^/]+)/tags/?$', url)
+        tags_match = re.match(r'https://github.com/(?P<user_repo>[^/]+/[^/]+)/tags/?$', url)
 
         version = None
         url_pattern = 'https://codeload.github.com/%s/zip/%s'
@@ -201,7 +201,7 @@ class GitHubClient(JSONApiClient):
               `donate` - URL of a donate page
         """
 
-        user_match = re.match('https://github.com/(?P<user>[^/]+)/?$', url)
+        user_match = re.match(r'https://github.com/(?P<user>[^/]+)/?$', url)
         if user_match is None:
             return None
 
@@ -309,11 +309,11 @@ class GitHubClient(JSONApiClient):
         """
 
         branch = None
-        branch_match = re.match('https://github.com/(?P<user_repo>[^/]+/[^/]+)/tree/(?P<branch>[^/]+)/?$', url)
+        branch_match = re.match(r'https://github.com/(?P<user_repo>[^/]+/[^/]+)/tree/(?P<branch>[^/]+)/?$', url)
         if branch_match is not None:
             branch = branch_match.group('branch')
 
-        repo_match = re.match('https://github.com/(?P<user_repo>[^/]+/[^/]+)($|/.*$)', url)
+        repo_match = re.match(r'https://github.com/(?P<user_repo>[^/]+/[^/]+)($|/.*$)', url)
         if repo_match is None:
             return (None, None)
 
