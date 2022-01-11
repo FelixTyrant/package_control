@@ -44,7 +44,8 @@ class ReadmeClient(JSONApiClient):
         # content of the readme API call
         github_match = re.match(
             r'https://raw\.github(?:usercontent)?\.com'
-            r'/(?P<user_repo>[^/]+/[^/]+)'
+            r'/(?P<user>[^/]+)'
+            r'/(?P<repo>[^/]+)'
             r'/(?P<branch>[^/]+)'
             r'/readme(\.(md|mkd|mdown|markdown|textile|creole|rst|txt))?$',
             url,
@@ -53,8 +54,9 @@ class ReadmeClient(JSONApiClient):
         if github_match:
             try:
                 info = self.fetch_json(
-                    'https://api.github.com/repos/%s/readme?%s' % (
-                        github_match.group("user_repo"),
+                    'https://api.github.com/repos/%s/%s/readme?%s' % (
+                        github_match.group("user"),
+                        github_match.group("repo"),
                         urlencode({'ref': github_match.group("branch")})
                     ),
                     prefer_cached=True
